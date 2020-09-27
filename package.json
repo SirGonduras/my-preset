@@ -1,0 +1,23 @@
+{
+  "name": "my-preset",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "prettier": "^2.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "format": "prettier"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirGonduras/my-preset.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SirGonduras/my-preset/issues"
+  },
+  "homepage": "https://github.com/SirGonduras/my-preset#readme"
+}
