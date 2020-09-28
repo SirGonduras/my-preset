@@ -30,7 +30,7 @@ let path = {
 let {src, dest} = require("gulp"),
   gulp = require("gulp"),
   browsersync = require("browser-sync").create(),
-  fileinclude = require("gulp-include");
+  fileinclude = require("gulp-file-include");
 
 function browserSync(params) {
   browsersync.init({
@@ -49,8 +49,12 @@ function html(params) {
     .pipe(browsersync.stream());
 }
 
+function watchFiles(params) {
+  gulp.watch([path.watch.html], html);
+}
+
 let build = gulp.series(html);
-let watch = gulp.parallel(build, browserSync);
+let watch = gulp.parallel(build, watchFiles, browserSync);
 
 exports.html = html;
 exports.build = build;
