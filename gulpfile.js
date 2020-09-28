@@ -11,7 +11,7 @@ let path = {
   },
 
   src: {
-    html: sourceFolder + "/*.html",
+    html: [sourceFolder + "/*.html", "!" + sourceFolder + "/_*.html"],
     less: sourceFolder + "/less/style.less",
     js: sourceFolder + "/js/script.js",
     img: sourceFolder + "/img/**/*.{jpg, png, svg, gif, ico, webm}",
@@ -30,7 +30,13 @@ let path = {
 let {src, dest} = require("gulp"),
   gulp = require("gulp"),
   browsersync = require("browser-sync").create(),
-  fileinclude = require("gulp-file-include");
+  fileinclude = require("gulp-file-include"),
+  del = require("del"),
+  less = require("gulp-less"),
+  group_media = require("gulp-group-css-media-queries"),
+  clean_css = require("gulp-clean-css"),
+  rename = require("gulp-rename"),
+  autoprefixer = require("gulp-autoprefixer");
 
 function browserSync(params) {
   browsersync.init({
@@ -51,11 +57,38 @@ function html(params) {
 
 function watchFiles(params) {
   gulp.watch([path.watch.html], html);
+  gulp.watch([path.watch.less], css);
 }
 
-let build = gulp.series(html);
+function clean(params) {
+  return del(path.clean);
+}
+
+function css(params) {
+  return src(path.src.less)
+    .pipe(less())
+    .pipe(group_media())
+    .pipe(
+      autoprefixer({
+        overrideBrowserslist: ["last 5 versions"],
+        cascade: true
+      })
+    )
+    .pipe(dest(path.build.css))
+    .pipe(clean_css())
+    .pipe(
+      rename({
+        extname: ".min.css"
+      })
+    )
+    .pipe(dest(path.build.css))
+    .pipe(browsersync.stream());
+}
+
+let build = gulp.series(clean, gulp.parallel(css, html));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
+exports.css = css;
 exports.html = html;
 exports.build = build;
 exports.watch = watch;
