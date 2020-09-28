@@ -6,7 +6,11 @@
   "dependencies": {
     "prettier": "^2.1.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.26.12",
+    "gulp": "^4.0.2",
+    "gulp-include": "^2.4.1"
+  },
   "scripts": {
     "format": "prettier"
   },
