@@ -166,43 +166,39 @@ function fonts(params) {
   return src(path.src.fonts).pipe(ttf2woff2()).pipe(dest(path.build.fonts));
 }
 
-function fontsStyle(params) {
-  let file_content = fs.readFileSync(source_folder + "/less/fonts.less");
-  if (file_content == "") {
-    fs.writeFile(source_folder + "/less/fonts.less", "", cb);
-    return fs.readdir(path.build.fonts, function (err, items) {
-      if (items) {
-        let c_fontname;
-        for (var i = 0; i < items.length; i++) {
-          let fontname = items[i].split(".");
-          fontname = fontname[0];
-          if (c_fontname != fontname) {
-            fs.appendFile(
-              source_folder + "/less/fonts.less",
-              '@include font("' +
-                fontname +
-                '", "' +
-                fontname +
-                '", "400", "normal");\r\n',
-              cb
-            );
-          }
-          c_fontname = fontname;
-        }
-      }
-    });
-  }
-}
+// function fontsStyle(params) {
+//   let file_content = fs.readFileSync(sourceFolder + "/less/fonts.less");
+//   if (file_content == "") {
+//     fs.writeFile(sourceFolder + "/less/fonts.less", "", cb);
+//     return fs.readdir(path.build.fonts, function (err, items) {
+//       if (items) {
+//         let c_fontname;
+//         for (var i = 0; i < items.length; i++) {
+//           let fontname = items[i].split(".");
+//           fontname = fontname[0];
+//           if (c_fontname != fontname) {
+//             fs.appendFile(
+//               sourceFolder + "/less/fonts.less",
+//               '@include font("' +
+//                 fontname +
+//                 '", "' +
+//                 fontname +
+//                 '", "400", "normal");\r\n',
+//               cb
+//             );
+//           }
+//           c_fontname = fontname;
+//         }
+//       }
+//     });
+//   }
+// }
 
-function cb() {}
+// function cb() {}
 
-let build = gulp.series(
-  clean,
-  gulp.parallel(js, css, html, images, fonts, fontsStyle)
-);
+let build = gulp.series(clean, gulp.parallel(js, css, html, images, fonts));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
-exports.fontsStyle = fontsStyle;
 exports.fonts = fonts;
 exports.images = images;
 exports.js = js;
